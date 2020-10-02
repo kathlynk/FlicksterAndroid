@@ -1,5 +1,6 @@
 package com.example.flicksterandroid.adapters;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ReceiverCallNotAllowedException;
@@ -15,10 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.flicksterandroid.DetailActivity;
+import com.example.flicksterandroid.MainActivity;
 import com.example.flicksterandroid.R;
 import com.example.flicksterandroid.models.Movie;
 
@@ -103,6 +106,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                     Intent i = new Intent(context, DetailActivity.class);
                     i.putExtra("title", movie.getTitle());
                     i.putExtra("movie", Parcels.wrap(movie));
+
                     context.startActivity(i);
                 }
             });
