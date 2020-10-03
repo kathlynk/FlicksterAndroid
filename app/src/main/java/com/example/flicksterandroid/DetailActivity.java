@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.media.Rating;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -42,8 +43,9 @@ public class DetailActivity extends YouTubeBaseActivity {
         ratingBar = findViewById(R.id.ratingBar);
         youTubePlayerView = findViewById(R.id.player);
 
+
         // String title = getIntent().getStringExtra("title");
-        Movie movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
+        final Movie movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
         ratingBar.setRating((float) movie.getRating());
@@ -60,7 +62,7 @@ public class DetailActivity extends YouTubeBaseActivity {
 
                     String youtubeKey = results.getJSONObject(0).getString("key");
                     Log.d("DetailActivity", youtubeKey);
-                    initializeYoutube(youtubeKey);
+                    initializeYoutube(youtubeKey, movie);
                 } catch (JSONException e) {
                     Log.e("DetailActivity", "Failed to parse JSON", e);
                 }
@@ -73,12 +75,15 @@ public class DetailActivity extends YouTubeBaseActivity {
             }
         });
     }
-        private void initializeYoutube (final String youtubeKey){
+        private void initializeYoutube (final String youtubeKey, final Movie movie){
             youTubePlayerView.initialize(YOUTUBE_API_KEY, new YouTubePlayer.OnInitializedListener() {
                 @Override
                 public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                     Log.d("DetailActivity", "onInitializationSuccess");
-                    youTubePlayer.cueVideo(youtubeKey);
+                    if (movie.getRating() > 5) {
+                        youTubePlayer.loadVideo(youtubeKey);
+                    } else {
+                    youTubePlayer.cueVideo(youtubeKey); }
                 }
 
                 @Override
